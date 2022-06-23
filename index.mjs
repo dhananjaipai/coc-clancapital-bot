@@ -330,7 +330,7 @@ Members = await loadTrackedMembers();
 while (true) {
   console.log(new Date(), "START");
   try {
-    // await trackLoop();
+    await trackLoop();
   } catch (e) {
     console.log(new Date(), "Exception", e);
   }
