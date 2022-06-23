@@ -3,8 +3,8 @@ import { Op } from "sequelize";
 import { sequelize, Member, Record } from "./db/index.mjs";
 import CoCAPI from "./utils/coc.mjs";
 import { bot, message } from "./utils/telegram.mjs";
-import dotenv from 'dotenv'
-dotenv.config()
+import dotenv from "dotenv";
+dotenv.config();
 
 let Members;
 const loadTrackedMembers = () => {
@@ -130,42 +130,47 @@ const recordLoot = async (tag, clan, looted) => {
   message(`[${id}] | ${Members[tag].name} looted ${loot} from ${clan}`);
   Members[tag].looted = looted;
 };
+
+const pingPlayer = async (memberTag) => {
+  try {
+    const response = await CoCAPI.fetchPlayerInfo(memberTag);
+    const data = await response.json();
+    const achievement_values = data?.achievements?.reduce((acc, x) => {
+      if (acc[x.name] == null) acc[x.name] = x.value;
+      return acc;
+    }, {});
+    let clan = data?.clan?.name;
+    let donated = Number(achievement_values["Most Valuable Clanmate"]);
+    let looted = Number(achievement_values["Aggressive Capitalism"]);
+    if (
+      Members[memberTag].donated == undefined ||
+      Number(Members[memberTag].donated) == 0
+    ) {
+      Members[memberTag].donated = donated;
+      await Member.update({ donated }, { where: { tag: memberTag } });
+    }
+    if (
+      Members[memberTag].looted == undefined ||
+      Number(Members[memberTag].looted) == 0
+    ) {
+      Members[memberTag].looted = looted;
+      await Member.update({ looted }, { where: { tag: memberTag } });
+    }
+    if (Number(Members[memberTag].donated) != donated) {
+      await recordDonation(memberTag, clan, donated);
+    }
+    if (Number(Members[memberTag].looted) != looted) {
+      await recordLoot(memberTag, clan, looted);
+    }
+  } catch (e) {
+    console.error(e);
+    message(`Refresh failed for ${memberTag}`);
+  }
+};
+
 const trackLoop = async () => {
   await syncAllClanMembers("#PP0YPJL2"); // Track Fight Club CET
-  await Promise.all(
-    Object.keys(Members).map(async (memberTag) => {
-      const response = await CoCAPI.fetchPlayerInfo(memberTag);
-      const data = await response.json();
-      const achievement_values = data?.achievements?.reduce((acc, x) => {
-        if (acc[x.name] == null) acc[x.name] = x.value;
-        return acc;
-      }, {});
-      if (achievement_values == undefined) return;
-      let clan = data?.clan?.name;
-      let donated = Number(achievement_values["Most Valuable Clanmate"]);
-      let looted = Number(achievement_values["Aggressive Capitalism"]);
-      if (
-        Members[memberTag].donated == undefined ||
-        Number(Members[memberTag].donated) == 0
-      ) {
-        Members[memberTag].donated = donated;
-        await Member.update({ donated }, { where: { tag: memberTag } });
-      }
-      if (
-        Members[memberTag].looted == undefined ||
-        Number(Members[memberTag].looted) == 0
-      ) {
-        Members[memberTag].looted = looted;
-        await Member.update({ looted }, { where: { tag: memberTag } });
-      }
-      if (Number(Members[memberTag].donated) != donated) {
-        await recordDonation(memberTag, clan, donated);
-      }
-      if (Number(Members[memberTag].looted) != looted) {
-        await recordLoot(memberTag, clan, looted);
-      }
-    })
-  );
+  await Promise.all(Object.keys(Members).map((tag) => pingPlayer(tag)));
 };
 
 const searchMember = async (name) => {

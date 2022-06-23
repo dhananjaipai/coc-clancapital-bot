@@ -2,6 +2,7 @@ import { Telegraf } from "telegraf";
 import ngrok from "ngrok";
 import express from "express";
 import {} from 'dotenv/config'
+import _fetch from "node-fetch";
 
 const ngrok_token = process.env.NGROK_TOKEN;
 const bot_token = process.env.TELEGRAM_TOKEN;
