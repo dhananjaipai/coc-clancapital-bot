@@ -140,6 +140,10 @@ const pingPlayer = async (memberTag) => {
       return acc;
     }, {});
     let clan = data?.clan?.name;
+    if (achievement_values === undefined) {
+      // message(`Refresh failed for ${memberTag}`);
+      return;
+    }
     let donated = Number(achievement_values["Most Valuable Clanmate"]);
     let looted = Number(achievement_values["Aggressive Capitalism"]);
     if (
@@ -164,7 +168,6 @@ const pingPlayer = async (memberTag) => {
     }
   } catch (e) {
     console.error(e);
-    message(`Refresh failed for ${memberTag}`);
   }
 };
 
@@ -295,17 +298,17 @@ bot.command("help", (ctx) =>
 bot.hears(/\/search (.*)/, async (ctx) => {
   const name = ctx.match[1];
   const response = await searchMember(name);
-  ctx.replyWithMarkdown(response);
+  ctx.reply(response);
 });
 bot.hears(/\/track (#.*)/, async (ctx) => {
   const tag = ctx.match[1];
   const response = await trackMember(tag);
-  ctx.replyWithMarkdown(response);
+  ctx.reply(response);
 });
 bot.hears(/\/untrack (#.*)/, async (ctx) => {
   const tag = ctx.match[1];
   const response = await unTrackMember(tag);
-  ctx.replyWithMarkdown(response);
+  ctx.reply(response);
 });
 bot.hears(/\/sync (#.*)/, async (ctx) => {
   const tag = ctx.match[1];
@@ -316,13 +319,13 @@ bot.hears(/\/link (#.*) (#.*)/, async (ctx) => {
   const mini = ctx.match[1];
   const main = ctx.match[2];
   const response = await markMainTag(mini, main);
-  ctx.replyWithMarkdown(response);
+  ctx.reply(response);
 });
 bot.hears(/\/fix (\d*) (.*)/, async (ctx) => {
   const id = ctx.match[1];
   const clan = ctx.match[2];
   const response = await fixRecord(id, clan);
-  ctx.replyWithMarkdown(response);
+  ctx.reply(response);
 });
 bot.hears(/\/show (.*)/, async (ctx) => {
   const input = ctx.match[1];

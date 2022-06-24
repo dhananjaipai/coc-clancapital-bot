@@ -25,7 +25,7 @@ app.listen(PORT, () => {
 
 export const message = (notification_text) => {
   return _fetch(
-    `https://api.telegram.org/bot${bot_token}/sendMessage?chat_id=${chat_id}&parse_mode=markdown&text=${notification_text}`,
+    `https://api.telegram.org/bot${bot_token}/sendMessage?chat_id=${chat_id}&text=${notification_text}`,
     { body: null, method: "POST" }
   );
 };
