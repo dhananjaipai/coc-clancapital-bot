@@ -3,6 +3,7 @@ import ngrok from "ngrok";
 import express from "express";
 import {} from 'dotenv/config'
 import _fetch from "node-fetch";
+import { findOpenClans } from "./findClans.mjs";
 
 const ngrok_token = process.env.NGROK_TOKEN;
 const bot_token = process.env.TELEGRAM_TOKEN;
@@ -16,7 +17,7 @@ const fetch = URI => _fetch(URI, {
     }
 });
 
-const url = await ngrok.connect({ authtoken: ngrok_token, addr: PORT });
+export const url = await ngrok.connect({ authtoken: ngrok_token, addr: PORT });
 export const bot = new Telegraf(bot_token);
 const secretPath = `/telegraf/${bot.secretPathComponent()}`;
 bot.telegram.setWebhook(`${url}${secretPath}`);
@@ -25,6 +26,10 @@ const app = express();
 app.get("/", (_, res) => res.send("OK"));
 app.use(bot.webhookCallback(secretPath));
 
+app.get("/findOpenClans/:tag/:max?", async (req, res) => {
+    const {tag, max} = req.params;
+    res.send(await findOpenClans(tag, max));
+});
 app.get("/playerClan/:tag", async (req, res) => {
     const {tag}=req.params;
     const data = await fetch(

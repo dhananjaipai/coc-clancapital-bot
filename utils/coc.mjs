@@ -10,6 +10,12 @@ const fetch = (URI) =>
   });
 
 export default {
+  fetchRaidInfo: (clanTag) =>
+    fetch(
+      `https://api.clashofclans.com/v1/clans/${encodeURIComponent(
+        clanTag
+      )}/capitalraidseasons?limit=2`
+    ),
   fetchClanInfo: (clanTag) =>
     fetch(
       `https://api.clashofclans.com/v1/clans/${encodeURIComponent(

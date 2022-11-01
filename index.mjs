@@ -2,7 +2,7 @@ import sleep from "./utils/sleep.mjs";
 import { Op } from "sequelize";
 import { sequelize, Member, Record } from "./db/index.mjs";
 import CoCAPI from "./utils/coc.mjs";
-import { bot, message } from "./utils/telegram.mjs";
+import { url, bot, message } from "./utils/telegram.mjs";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -332,6 +332,9 @@ bot.hears(/\/show (.*)/, async (ctx) => {
   const input = ctx.match[1];
   const response = await loadPlayerContribution(input);
   ctx.replyWithHTML(response);
+});
+bot.hears(/\/info/, (ctx) => {
+  ctx.reply(url);
 });
 
 Members = await loadTrackedMembers();
