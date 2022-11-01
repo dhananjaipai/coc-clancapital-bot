@@ -20,7 +20,7 @@ const loadTrackedMembers = () => {
 
 const syncAllClanMembers = async (clanTag) => {
   try {
-    const response = await CoCAPI.fetchClanInfo(clanTag);
+    const response = await CoCAPI.fetchClanMembersInfo(clanTag);
     const data = await response.json();
     const newMembers = data?.items
       .filter(({ tag }) => Members[tag] == null)
@@ -173,6 +173,8 @@ const pingPlayer = async (memberTag) => {
 
 const trackLoop = async () => {
   await syncAllClanMembers("#PP0YPJL2"); // Track Fight Club CET
+  await syncAllClanMembers("#292QRGCUG"); // Track Turbo
+  await syncAllClanMembers("#989RYG99"); // Track HANS
   await Promise.all(Object.keys(Members).map((tag) => pingPlayer(tag)));
 };
 
@@ -198,7 +200,6 @@ const fixRecord = async (id, clan) => {
     return `Record not updated. Check for errors`;
   }
 };
-
 const loadPlayerContribution = async (input) => {
   try {
     let MESSAGE = "";
@@ -333,7 +334,6 @@ bot.hears(/\/show (.*)/, async (ctx) => {
   ctx.replyWithHTML(response);
 });
 
-// bot.use(Telegraf.log());
 Members = await loadTrackedMembers();
 while (true) {
   console.log(new Date(), "START");

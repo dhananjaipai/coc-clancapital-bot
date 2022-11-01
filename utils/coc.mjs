@@ -14,6 +14,12 @@ export default {
     fetch(
       `https://api.clashofclans.com/v1/clans/${encodeURIComponent(
         clanTag
+      )}`
+    ),
+  fetchClanMembersInfo: (clanTag) =>
+    fetch(
+      `https://api.clashofclans.com/v1/clans/${encodeURIComponent(
+        clanTag
       )}/members`
     ),
   fetchPlayerInfo: (memberTag) =>
