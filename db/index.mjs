@@ -16,7 +16,7 @@ export const sequelize = new Sequelize({
 export const Member = sequelize.define("Member", _Member);
 export const Record = sequelize.define("Record", _Record);
 export const QUERY_SUMMARY = fs.readFileSync(
-  path.join(__dirname, "query", "summary.sql"),
+  path.join(path.resolve(), "query", "summary.sql"),
   { encoding: "utf8", flag: "r" }
 );
 try {
