@@ -25,7 +25,7 @@ const secretPath = `/telegraf/${bot.secretPathComponent()}`;
 bot.telegram.setWebhook(`${url}${secretPath}`);
 
 const app = express();
-const cachedClans = [];
+let cachedClans = [];
 
 app.get("/", (_, res) => res.send("OK"));
 app.use(bot.webhookCallback(secretPath));
