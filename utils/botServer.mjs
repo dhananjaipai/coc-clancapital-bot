@@ -5,7 +5,7 @@ import {} from 'dotenv/config'
 import _fetch from "node-fetch";
 import { findOpenClans } from "./findClans.mjs";
 import { QueryTypes } from "sequelize";
-import { sequelize, QUERY_SUMMARY } from "../db";
+import { sequelize, QUERY_SUMMARY } from "../db/index.mjs";
 
 const ngrok_token = process.env.NGROK_TOKEN;
 const bot_token = process.env.TELEGRAM_TOKEN;
