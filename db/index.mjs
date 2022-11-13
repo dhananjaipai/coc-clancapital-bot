@@ -1,7 +1,9 @@
 import { Sequelize } from "sequelize";
 import _Member from "./models/Member.mjs";
 import _Record from "./models/Record.mjs";
+import * as fs from "fs";
 
+  
 export const sequelize = new Sequelize({
   dialect: "sqlite",
   storage: "./members.sqlite",
@@ -13,7 +15,7 @@ export const sequelize = new Sequelize({
 
 export const Member = sequelize.define("Member", _Member);
 export const Record = sequelize.define("Record", _Record);
-
+export const QUERY_SUMMARY = fs.readFileSync('./query/summary.sql',{encoding:'utf8', flag:'r'});
 try {
   await sequelize.authenticate();
   console.log("Connection has been established successfully");

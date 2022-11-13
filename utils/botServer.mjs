@@ -4,6 +4,8 @@ import express from "express";
 import {} from 'dotenv/config'
 import _fetch from "node-fetch";
 import { findOpenClans } from "./findClans.mjs";
+import { QueryTypes } from "sequelize";
+import { sequelize, QUERY_SUMMARY } from "../db";
 
 const ngrok_token = process.env.NGROK_TOKEN;
 const bot_token = process.env.TELEGRAM_TOKEN;
@@ -23,12 +25,21 @@ const secretPath = `/telegraf/${bot.secretPathComponent()}`;
 bot.telegram.setWebhook(`${url}${secretPath}`);
 
 const app = express();
+const cachedClans = [];
+
 app.get("/", (_, res) => res.send("OK"));
 app.use(bot.webhookCallback(secretPath));
 
+app.get("/summary", async (_, res) => {
+  res.send(await sequelize.query(QUERY_SUMMARY, { type: QueryTypes.SELECT }))
+});
 app.get("/findOpenClans/:tag/:max?", async (req, res) => {
     const {tag, max} = req.params;
-    res.send(await findOpenClans(tag, max));
+    cachedClans = await findOpenClans(tag, max);
+    res.send(cachedClans);
+});
+app.get("/openClans", (_, res) => {
+  res.send({ clans: cachedClans });
 });
 app.get("/playerClan/:tag", async (req, res) => {
     const {tag}=req.params;
