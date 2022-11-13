@@ -2,7 +2,7 @@ import sleep from "./utils/sleep.mjs";
 import { Op } from "sequelize";
 import { sequelize, Member, Record } from "./db/index.mjs";
 import CoCAPI from "./utils/coc.mjs";
-import { url, bot, message } from "./utils/telegram.mjs";
+import { url, bot, message } from "./utils/botServer.mjs";
 import dotenv from "dotenv";
 dotenv.config();
 
