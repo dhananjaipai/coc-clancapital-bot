@@ -25,7 +25,7 @@ const fetch = (URI) =>
     },
   });
 
-export const url = await ngrok.connect({ authtoken: ngrok_token, addr: PORT });
+export const url = await ngrok.connect({ authtoken: ngrok_token, region: "eu", addr: PORT });
 export const bot = new Telegraf(bot_token);
 const secretPath = `/telegraf/${bot.secretPathComponent()}`;
 bot.telegram.setWebhook(`${url}${secretPath}`);

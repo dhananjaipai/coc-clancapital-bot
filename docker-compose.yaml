@@ -19,7 +19,7 @@ services:
       MYSQL_DATABASE: ${DATABASE_NAME}
       MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin
+    image: arm64v8/phpmyadmin
     container_name: pma
     depends_on: [db]
     environment:
@@ -31,10 +31,29 @@ services:
     ports:
       - 6060:80
     networks:
+      - public
       - private
+  # ngrok:
+  #   image: ngrok/ngrok
+  #   container_name: ngrok
+  #   environment:
+  #     NGROK_AUTHTOKEN: ${NGROK_TOKEN}
+  #   restart: unless-stopped
+  #   command:
+  #     - http
+  #     - "--region eu"
+  #     - "80"
+  #   ports:
+  #     - 4040:4040
+  #   volumes:
+  #     - ./resolv.conf:/etc/resolv.conf
+  #   networks:
+  #     - public
+  #     - private
+
   bot:
-    build: . # During dev
-    # image: dhananjaipai/coc-bot:latest
+    # build: . # During dev
+    image: dhananjaipai/coc-bot:latest
     depends_on: [db]
     container_name: bot
     environment: # Will be set through .env file
@@ -48,7 +67,7 @@ services:
       - DATABASE_NAME
     ports:
       - 3000:3000
-    # restart: unless-stopped
+    restart: unless-stopped
     networks:
       - public
       - private
