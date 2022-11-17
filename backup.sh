@@ -1,0 +1,1 @@
+docker exec db /usr/bin/mysqldump -u root --password="${DATABASE_PASSWORD}" "${DATABASE_NAME}" > backup.sql

@@ -1,4 +1,5 @@
 .env
 *.sqlite
+backup.sql
 package-lock.json
 node_modules/*
