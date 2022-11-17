@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  bot:
+    build: .
+    container_name: bot
+    environment: # Will be set through .env file
+      - CLASH_API_TOKEN
+      - NGROK_TOKEN
+      - TELEGRAM_TOKEN
+      - CHAT_ID
+    ports:
+      - "3000:3000"
+    volumes:
+      - "./members.sqlite:/bot/members.sqlite"
+    restart: unless-stopped

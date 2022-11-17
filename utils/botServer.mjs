@@ -11,7 +11,7 @@ import { sequelize, QUERY_SUMMARY } from "../db/index.mjs";
 const ngrok_token = process.env.NGROK_TOKEN;
 const bot_token = process.env.TELEGRAM_TOKEN;
 const chat_id = process.env.CHAT_ID;
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const allowedOrigins = [
   "http://localhost:3000",
   "https://dhananjaipai.github.io",
